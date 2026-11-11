@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Programming — Sıfırdan Adım Adım Kodlama Labı</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <!-- Üst Başlık Çubuğu -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-badge">HTML5 + CSS3</span>
+      <div>
+        <div class="brand-title">Web Programming — Adım Adım Kodlama Labı</div>
+        <div class="brand-sub">Dr. Mesut ÜNLÜ Ders Slaytlarına Göre Sıfırdan Etkileşimli Uygulama</div>
+      </div>
+    </div>
+
+    <div class="topbar-right">
+      <div class="progress-pill">
+        <span id="progressText">0/16 Adım Tamamlandı</span>
+        <div class="progress-bar-wrap">
+          <div id="progressFill" class="progress-bar-fill"></div>
+        </div>
+      </div>
+      <button type="button" id="btnResetAll" class="btn btn-ghost">Tümünü Sıfırla</button>
+    </div>
+  </header>
+
+  <!-- 3 Sütunlu Klasik Lab Düzeni -->
+  <main class="workspace">
+    <!-- SOL PANEL: Müfredat Haritası -->
+    <aside class="sidebar">
+      <div class="sidebar-header">Öğrenme Rotası (16 Adım)</div>
+      <div id="lessonList" class="lesson-list"></div>
+    </aside>
+
+    <!-- ORTA PANEL: Açıklama + Görevler + Kod Editörü -->
+    <section class="center-pane">
+      <div class="guide-scroll">
+        <div id="stepBadges" class="step-badges"></div>
+        <h1 id="lessonTitle" class="lesson-title">Adım Yükleniyor...</h1>
+
+        <div id="meaningBox" class="meaning-box"></div>
+
+        <div class="section-label">Etiket / Seçici Sözlüğü (Anlamını görmek için tıkla)</div>
+        <div id="tokenStrip" class="token-strip"></div>
+        <div id="tokenDetail" class="token-detail"></div>
+
+        <div class="section-label">Bu Adımda Yapılacaklar (Yazdıkça otomatik güncellenir)</div>
+        <ul id="taskList" class="task-list"></ul>
+
+        <div id="hintBanner" class="hint-banner"></div>
+      </div>
+
+      <div class="editor-wrap">
+        <div class="editor-toolbar">
+          <div class="editor-tabs">
+            <button type="button" id="tabHtml" class="tab-btn active">index.html</button>
+            <button type="button" id="tabCss" class="tab-btn">style.css</button>
+          </div>
+          <div class="editor-actions">
+            <button type="button" id="btnCheck" class="btn btn-success">Kontrol Et</button>
+            <button type="button" id="btnHint" class="btn btn-warn">İpucu</button>
+            <button type="button" id="btnSolve" class="btn btn-primary">Çözümü Göster</button>
+            <button type="button" id="btnReset" class="btn btn-ghost">Sıfırla</button>
+          </div>
+        </div>
+
+        <textarea id="codeEditor" class="code-area" spellcheck="false" aria-label="Kod Editörü"></textarea>
+
+        <div class="feedback-bar">
+          <div id="feedbackMsg" class="feedback-msg">Kodu düzenlemeye başla, sağ tarafta web sayfası görünümünü anında izle.</div>
+          <div class="nav-steps">
+            <button type="button" id="btnPrev" class="btn">Önceki</button>
+            <button type="button" id="btnNext" class="btn btn-primary">Sonraki</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SAĞ PANEL: Klasik Tarayıcı Penceresinde Canlı Web Sayfası + Simülatörler -->
+    <section class="right-pane">
+      <div class="preview-tabs">
+        <button type="button" class="mode-btn active" data-mode="preview">Web Sayfası Önizleme</button>
+        <button type="button" class="mode-btn" data-mode="xray">Seçici Röntgeni</button>
+        <button type="button" class="mode-btn" data-mode="boxmodel">Kutu Modeli</button>
+        <button type="button" class="mode-btn" data-mode="http">GET vs POST</button>
+      </div>
+
+      <!-- MOD 1: Klasik Tarayıcı Penceresi -->
+      <div id="panel-preview" class="mode-panel active">
+        <div class="browser-window">
+          <div class="browser-tab-strip">
+            <div class="window-controls">
+              <span class="win-dot"></span>
+              <span class="win-dot"></span>
+              <span class="win-dot"></span>
+            </div>
+            <div id="browserTabTitle" class="browser-tab">DBMS Course</div>
+          </div>
+          <div class="browser-bar">
+            <span class="url-label">Adres</span>
+            <div id="previewUrl" class="url-box">http://localhost/ders-1.html</div>
+          </div>
+          <iframe id="previewFrame" class="preview-frame" title="Canlı Web Sayfası Önizleme"></iframe>
+          <div class="dom-status-bar">
+            <span id="domTagsSummary">Aktif HTML Etiketleri: -</span>
+            <span id="domCssSummary">CSS Kuralları: 0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- MOD 2: CSS Seçici Röntgeni -->
+      <div id="panel-xray" class="mode-panel">
+        <div class="sim-scroll">
+          <div class="sim-card">
+            <h3>CSS Seçici Röntgeni (Vize Kodlama Laboratuvarı)</h3>
+            <p>
+              Vizede hocanın en çok dikkat edeceği konu <strong>CSS Seçiciler</strong>. Aşağıya istediğin seçiciyi yaz veya hazır butonlara tıkla; örnek form sayfasında <strong>hangi elemanların yakalandığını</strong> kırmızı çerçeve ve sarı arka planla gör.
+            </p>
+            <div class="xray-input-row">
+              <input type="text" id="xrayInput" class="xray-input" value='[id^="s"]' placeholder='Örn: [type="password"] veya .field-box'>
+              <button type="button" id="xrayRunBtn" class="btn btn-primary">Hedefi Göster</button>
+            </div>
+            <div id="xrayPresets" class="xray-presets"></div>
+
+            <div id="xrayStage" class="xray-stage">
+              <form action="/register.php" method="post">
+                <fieldset>
+                  <legend>Course Registration Form</legend>
+                  <p>İlk paragraf (<code>p:first-child</code> adayı).</p>
+                  <div class="field-box">
+                    <label for="sname">Student Name (<code>id="sname"</code>):</label><br>
+                    <input type="text" id="sname" name="sname" value="Ayşe">
+                  </div>
+                  <div class="field-box">
+                    <label for="spin">Password / PIN (<code>id="spin"</code>):</label><br>
+                    <input type="password" id="spin" name="spin" value="1234">
+                  </div>
+                  <div class="field-box">
+                    <label for="skills">Yorum Kutusu (<code>textarea</code>):</label><br>
+                    <textarea id="skills" rows="2" cols="28">HTML &amp; CSS</textarea>
+                  </div>
+                  <p>
+                    <a href="notes.pdf" target="_blank">Ders Notu (notes.pdf)</a>
+                  </p>
+                  <input type="submit" id="submitBtn" value="Gönder (Submit)">
+                </fieldset>
+              </form>
+            </div>
+
+            <div id="xrayExplain" class="xray-explain"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MOD 3: Kutu Modeli Görselleştirici -->
+      <div id="panel-boxmodel" class="mode-panel">
+        <div class="sim-scroll">
+          <div class="sim-card">
+            <h3>İnteraktif CSS Kutu Modeli (Box Model)</h3>
+            <p>
+              Sürgüleri kaydırarak <strong>Margin</strong> (turuncu dış boşluk), <strong>Border</strong> (yeşil kenarlık), <strong>Padding</strong> (mavi iç boşluk), <strong>Content Width</strong> ve <strong>Outline</strong> (kırmızı dış çizgi) farkını canlı gör.
+            </p>
+            <div class="sliders-grid">
+              <div class="slider-item">
+                <label><span>margin</span><span id="bmMarginVal">20px</span></label>
+                <input type="range" id="bmMargin" min="0" max="45" value="20">
+              </div>
+              <div class="slider-item">
+                <label><span>border</span><span id="bmBorderVal">8px</span></label>
+                <input type="range" id="bmBorder" min="0" max="20" value="8">
+              </div>
+              <div class="slider-item">
+                <label><span>padding</span><span id="bmPaddingVal">20px</span></label>
+                <input type="range" id="bmPadding" min="0" max="45" value="20">
+              </div>
+              <div class="slider-item">
+                <label><span>width</span><span id="bmWidthVal">180px</span></label>
+                <input type="range" id="bmWidth" min="110" max="260" value="180">
+              </div>
+              <div class="slider-item">
+                <label><span>outline (boyutu etkilemez)</span><span id="bmOutlineVal">2px</span></label>
+                <input type="range" id="bmOutline" min="0" max="10" value="2">
+              </div>
+            </div>
+
+            <div class="box-stage">
+              <div id="bmBoxMargin" class="bm-margin" title="Margin (Dış Boşluk)">
+                <div id="bmBoxBorder" class="bm-border" title="Border (Kenarlık)">
+                  <div id="bmBoxPadding" class="bm-padding" title="Padding (İç Boşluk)">
+                    <div id="bmBoxContent" class="bm-content">Content<br>(İçerik)</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <pre id="bmCssOutput" class="http-packet" style="margin-top:12px;"></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- MOD 4: HTTP GET vs POST Simülatörü -->
+      <div id="panel-http" class="mode-panel">
+        <div class="sim-scroll">
+          <div class="sim-card">
+            <h3>Form Gönderim Simülatörü (<code>GET</code> vs <code>POST</code>)</h3>
+            <p>
+              Dr. Mesut ÜNLÜ'nün slaytlarındaki en kritik form kuralı: <code>method="get"</code> veriyi adres çubuğuna açıkça yazar; <code>method="post"</code> ise HTTP gövdesinde (Body) saklar. Aşağıdan seçip farkı gör:
+            </p>
+            <div class="sliders-grid">
+              <div class="slider-item">
+                <label><span>method seçimi:</span></label>
+                <select id="simMethod" class="xray-input" style="width:100%;padding:6px;">
+                  <option value="GET">method="get"</option>
+                  <option value="POST" selected>method="post"</option>
+                </select>
+              </div>
+              <div class="slider-item">
+                <label><span>sname (Kullanıcı Adı):</span></label>
+                <input type="text" id="simName" class="xray-input" style="width:100%;padding:6px;" value="Ahmet">
+              </div>
+              <div class="slider-item">
+                <label><span>spin (Gizli Şifre):</span></label>
+                <input type="text" id="simPass" class="xray-input" style="width:100%;padding:6px;" value="gizli123">
+              </div>
+              <div class="slider-item" style="display:flex;align-items:end;">
+                <button type="button" id="simSendBtn" class="btn btn-primary" style="width:100%;justify-content:center;">Paketi İncele</button>
+              </div>
+            </div>
+
+            <div class="section-label">Tarayıcı Adres Çubuğu (URL)</div>
+            <div id="simUrlDisplay" class="url-box" style="margin-bottom:10px;"></div>
+
+            <div class="section-label">Sunucuya Giden HTTP İsteği</div>
+            <pre id="simPacketDisplay" class="http-packet"></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="./lessons.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
