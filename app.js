@@ -1,5 +1,6 @@
 (function () {
   const STORAGE_KEY = "wplab_progress_v1";
+  const THEME_KEY = "wplab_theme_v1";
   const lessons = window.LAB_LESSONS || [];
 
   const state = {
@@ -33,6 +34,7 @@
     btnHint: document.getElementById("btnHint"),
     btnSolve: document.getElementById("btnSolve"),
     btnReset: document.getElementById("btnReset"),
+    btnTheme: document.getElementById("btnTheme"),
     btnResetAll: document.getElementById("btnResetAll"),
     btnPrev: document.getElementById("btnPrev"),
     btnNext: document.getElementById("btnNext"),
@@ -618,6 +620,37 @@
       .replace(/"/g, "&quot;");
   }
 
+  function applyTheme(theme) {
+    const mode = theme === "light" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", mode);
+    if (el.btnTheme) {
+      el.btnTheme.textContent = mode === "dark" ? "Açık Mod" : "Koyu Mod";
+    }
+    try {
+      localStorage.setItem(THEME_KEY, mode);
+    } catch (_) {
+      // Yoksay
+    }
+  }
+
+  function initTheme() {
+    let saved = "dark";
+    try {
+      const raw = localStorage.getItem(THEME_KEY);
+      if (raw === "light" || raw === "dark") saved = raw;
+    } catch (_) {
+      // Yoksay
+    }
+    applyTheme(saved);
+    if (el.btnTheme) {
+      el.btnTheme.addEventListener("click", () => {
+        const current = document.documentElement.getAttribute("data-theme");
+        applyTheme(current === "light" ? "dark" : "light");
+      });
+    }
+  }
+
+  initTheme();
   loadStorage();
   renderSidebar();
   renderLessonBody();
